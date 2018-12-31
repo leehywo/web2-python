@@ -12,18 +12,9 @@ for item in files:
 if 'id' in form:
   pageId = form["id"].value
   description = open('data/'+pageId,'r').read()
-  update_link = '<a href="update.py?id={}">update</a>'.format(pageId)
-  delete_action = '''
-    <form action="process_delete.py" method="post">
-      <input type="hidden" name = "pageId" value={}>
-      <input type="submit" value="delete">
-    </form>
-    '''.format(pageId)
 else : 
   pageId = 'welcome'
   description = 'Hello, Web2 - Python'
-  update_link = ''
-  delete_action = ''
 
 print('''
 <!doctype html>
@@ -37,12 +28,12 @@ print('''
   <ol>
     {listStr}
   </ol>
-  <a href="create.py">create</a>
-  {update_link}
-  {delete_action}
-  <h2>{title}</h2>
-  <p>{desc}
-  </p>
+  <form action="process_create.py" method="post">
+      <a href="create.py">create</a>
+      <p><input type = "text" name = "title" placeholder = "title"></p>
+      <p><textarea rows="4" name = "description" placeholder = "description"></textarea></p>
+      <p><input type="submit"></p>
+  </form>
 </body>
 </html>
-'''.format(title=pageId,desc = description,listStr=listStr,update_link=update_link,delete_action = delete_action))
+'''.format(title=pageId,desc = description,listStr=listStr))
