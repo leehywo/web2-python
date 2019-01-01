@@ -1,14 +1,15 @@
 #!/usr/local/bin/python3
 print("Content-Type: text/html")
 print()
-import cgi,os,view
+import cgi,os,view, html_sanitizer
+sanitizer = html_sanitizer.Sanitizer()
 form = cgi.FieldStorage()
 
 if 'id' in form:
-  pageId = form["id"].value
+  title = pageId = form["id"].value
   description = open('data/'+pageId,'r').read()
-  description = description.replace('<','&lt')
-  description = description.replace('<','&gt')
+  description = sanitizer.sanitize(description)
+  title = sanitizer.sanitize(title)
   update_link = '<a href="update.py?id={}">update</a>'.format(pageId)
   delete_action = '''
     <form action="process_delete.py" method="post">
@@ -17,7 +18,7 @@ if 'id' in form:
     </form>
     '''.format(pageId)
 else : 
-  pageId = 'welcome'
+  title = pageId = 'welcome'
   description = 'Hello, Web2 - Python'
   update_link = ''
   delete_action = ''
@@ -43,7 +44,7 @@ print('''
 </body>
 </html>
 '''.format(
-  title=pageId,
+  title=title,
   desc = description,
   listStr=view.getList(),
   update_link=update_link,
