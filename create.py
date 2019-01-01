@@ -1,15 +1,10 @@
 #!/usr/local/bin/python3
 print("Content-Type: text/html")
 print()
-import cgi,os
+import cgi,os,view
 form = cgi.FieldStorage()
 
-def getList():
-  files = os.listdir('data')
-  listStr = ''
-  for item in files:
-    listStr = listStr + '<li><a href="index.py?id={name}">{name}</a></li>'.format(name = item)
-  return listStr
+
 
 if 'id' in form:
   pageId = form["id"].value
@@ -38,4 +33,7 @@ print('''
   </form>
 </body>
 </html>
-'''.format(title=pageId,desc = description,listStr=getList()))
+'''.format(
+  title=pageId,
+  desc = description,
+  listStr=view.getList()))
